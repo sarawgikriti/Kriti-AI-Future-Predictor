@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Kriti.AI Future Predictor 🔮</title>
 
@@ -37,7 +41,7 @@
       width: 92%;
       max-width: 430px;
       padding: 36px 25px;
-      background: rgba(15, 8, 25, 0.72);
+      background: rgba(15, 8, 25, 0.75);
       border: 1px solid rgba(190, 130, 255, 0.35);
       border-radius: 30px;
       box-shadow: 0 0 45px rgba(130, 65, 200, 0.25);
@@ -110,11 +114,12 @@
       font-size: 13px;
     }
 
-    .reveal {
+    .prediction-screen,
+    .boo-screen {
       display: none;
     }
 
-    .prediction {
+    .prediction-label {
       margin-bottom: 15px;
       color: #c9a8ef;
       font-size: 15px;
@@ -132,10 +137,6 @@
       color: #ff9a48;
       font-size: 65px;
       font-weight: bold;
-    }
-
-    .boo {
-      display: none;
     }
 
     .ghost {
@@ -158,13 +159,51 @@
       }
     }
 
-    .boo h1 {
+    .shake {
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translateX(0);
+      }
+
+      15% {
+        transform: translateX(-9px) rotate(-1deg);
+      }
+
+      30% {
+        transform: translateX(9px) rotate(1deg);
+      }
+
+      45% {
+        transform: translateX(-7px);
+      }
+
+      60% {
+        transform: translateX(7px);
+      }
+
+      75% {
+        transform: translateX(-4px);
+      }
+
+      90% {
+        transform: translateX(4px);
+      }
+
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .boo-screen h1 {
       margin-bottom: 5px;
       color: #ff903d;
       font-size: 55px;
     }
 
-    .boo h2 {
+    .boo-screen h2 {
       margin: 6px 0 18px;
       font-size: 25px;
     }
@@ -210,6 +249,12 @@
       transform: scale(0.97);
     }
 
+    .sound-note {
+      margin-top: 12px;
+      color: #826d92;
+      font-size: 11px;
+    }
+
     .footer {
       margin-top: 22px;
       color: #8d769f;
@@ -232,21 +277,77 @@
         opacity: 1;
       }
     }
+
+    .bat {
+      position: absolute;
+      top: 15%;
+      left: -15%;
+      z-index: 1;
+      font-size: 28px;
+      animation: fly 11s linear infinite;
+    }
+
+    @keyframes fly {
+      0% {
+        left: -15%;
+        transform: translateY(0) rotate(-7deg);
+      }
+
+      50% {
+        transform: translateY(-35px) rotate(7deg);
+      }
+
+      100% {
+        left: 110%;
+        transform: translateY(10px) rotate(-7deg);
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Decorative sparkles -->
+  <!-- Decorative background elements -->
 
-  <div class="sparkle" style="top: 10%; left: 12%;">✦</div>
-  <div class="sparkle" style="top: 18%; right: 13%;">✦</div>
-  <div class="sparkle" style="bottom: 15%; left: 15%;">✦</div>
-  <div class="sparkle" style="bottom: 11%; right: 12%;">✦</div>
+  <div
+    class="sparkle"
+    style="top: 10%; left: 12%;"
+  >
+    ✦
+  </div>
 
-  <div class="container">
+  <div
+    class="sparkle"
+    style="top: 18%; right: 13%;"
+  >
+    ✦
+  </div>
 
-    <!-- AI analysis screen -->
+  <div
+    class="sparkle"
+    style="bottom: 15%; left: 15%;"
+  >
+    ✦
+  </div>
+
+  <div
+    class="sparkle"
+    style="bottom: 11%; right: 12%;"
+  >
+    ✦
+  </div>
+
+  <div class="bat">
+    🦇
+  </div>
+
+
+  <div
+    class="container"
+    id="container"
+  >
+
+    <!-- Automatic AI analysis screen -->
 
     <div id="loading">
 
@@ -255,21 +356,36 @@
       </div>
 
       <h1>
-        AI FUTURE<br>
-        <span class="purple">PREDICTOR</span>
+        AI FUTURE
+        <br>
+
+        <span class="purple">
+          PREDICTOR
+        </span>
       </h1>
 
-      <div class="ball">🔮</div>
+      <div class="ball">
+        🔮
+      </div>
 
-      <div class="status" id="status">
+      <div
+        class="status"
+        id="status"
+      >
         Connecting to the future...
       </div>
 
       <div class="bar">
-        <div class="progress" id="progress"></div>
+        <div
+          class="progress"
+          id="progress"
+        ></div>
       </div>
 
-      <div class="percent" id="percent">
+      <div
+        class="percent"
+        id="percent"
+      >
         0% analyzed
       </div>
 
@@ -282,13 +398,18 @@
 
     <!-- Prediction screen -->
 
-    <div class="reveal" id="prediction">
+    <div
+      class="prediction-screen"
+      id="prediction"
+    >
 
-      <div class="prediction">
+      <div class="prediction-label">
         ✨ PREDICTION FOUND ✨
       </div>
 
-      <div class="ball">🔮</div>
+      <div class="ball">
+        🔮
+      </div>
 
       <div class="future-text">
         Your future has been revealed...
@@ -304,7 +425,10 @@
         </strong>
       </div>
 
-      <div class="countdown" id="countdown">
+      <div
+        class="countdown"
+        id="countdown"
+      >
         3
       </div>
 
@@ -313,17 +437,29 @@
 
     <!-- Final Halloween screen -->
 
-    <div class="boo" id="boo">
+    <div
+      class="boo-screen"
+      id="boo"
+    >
 
-      <div class="ghost">👻</div>
+      <div class="ghost">
+        👻
+      </div>
 
-      <h1>BOO!</h1>
+      <h1>
+        BOO!
+      </h1>
 
-      <h2>YOU'VE BEEN TRICKED!</h2>
+      <h2>
+        YOU'VE BEEN TRICKED!
+      </h2>
 
       <p>
-        Looks like the AI really <em>can</em>
+        Looks like the AI really
+        <em>can</em>
+
         <br>
+
         predict your future. 🤖
       </p>
 
@@ -343,6 +479,10 @@
         🔄 Predict Again
       </button>
 
+      <div class="sound-note">
+        🔊 Tap “Predict Again” if your phone blocked the sound
+      </div>
+
       <div class="footer">
         KRITI.AI • Future Predictor
       </div>
@@ -353,14 +493,30 @@
 
 
   <script>
-    const progress = document.getElementById("progress");
-    const percent = document.getElementById("percent");
-    const statusText = document.getElementById("status");
+    const loadingScreen =
+      document.getElementById("loading");
 
-    const loadingScreen = document.getElementById("loading");
-    const predictionScreen = document.getElementById("prediction");
-    const booScreen = document.getElementById("boo");
-    const countdownText = document.getElementById("countdown");
+    const predictionScreen =
+      document.getElementById("prediction");
+
+    const booScreen =
+      document.getElementById("boo");
+
+    const container =
+      document.getElementById("container");
+
+    const progress =
+      document.getElementById("progress");
+
+    const percent =
+      document.getElementById("percent");
+
+    const statusText =
+      document.getElementById("status");
+
+    const countdownText =
+      document.getElementById("countdown");
+
 
     const stages = [
       {
@@ -389,22 +545,248 @@
       }
     ];
 
+
     let stage = 0;
     let analysisTimer;
     let countdownTimer;
+    let audioContext;
+
+
+    function initializeAudio() {
+      try {
+        if (!audioContext) {
+          const BrowserAudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+          if (!BrowserAudioContext) {
+            return;
+          }
+
+          audioContext =
+            new BrowserAudioContext();
+        }
+
+        if (audioContext.state === "suspended") {
+          audioContext.resume();
+        }
+      } catch (error) {
+        console.log("Audio could not be initialized.");
+      }
+    }
+
+
+    function playSpookySound() {
+      initializeAudio();
+
+      if (
+        !audioContext ||
+        audioContext.state !== "running"
+      ) {
+        return;
+      }
+
+      const currentTime =
+        audioContext.currentTime;
+
+      const masterGain =
+        audioContext.createGain();
+
+      masterGain.connect(
+        audioContext.destination
+      );
+
+      masterGain.gain.setValueAtTime(
+        0.0001,
+        currentTime
+      );
+
+      masterGain.gain.exponentialRampToValueAtTime(
+        0.4,
+        currentTime + 0.05
+      );
+
+      masterGain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        currentTime + 1.8
+      );
+
+
+      // Low descending spooky tone
+
+      const lowTone =
+        audioContext.createOscillator();
+
+      const lowGain =
+        audioContext.createGain();
+
+      lowTone.type = "sawtooth";
+
+      lowTone.frequency.setValueAtTime(
+        155,
+        currentTime
+      );
+
+      lowTone.frequency.exponentialRampToValueAtTime(
+        45,
+        currentTime + 1.7
+      );
+
+      lowGain.gain.setValueAtTime(
+        0.32,
+        currentTime
+      );
+
+      lowGain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        currentTime + 1.75
+      );
+
+      lowTone.connect(lowGain);
+      lowGain.connect(masterGain);
+
+      lowTone.start(currentTime);
+      lowTone.stop(currentTime + 1.8);
+
+
+      // Higher ghost-like descending tone
+
+      const ghostTone =
+        audioContext.createOscillator();
+
+      const ghostGain =
+        audioContext.createGain();
+
+      ghostTone.type = "sine";
+
+      ghostTone.frequency.setValueAtTime(
+        720,
+        currentTime
+      );
+
+      ghostTone.frequency.exponentialRampToValueAtTime(
+        105,
+        currentTime + 1.5
+      );
+
+      ghostGain.gain.setValueAtTime(
+        0.16,
+        currentTime
+      );
+
+      ghostGain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        currentTime + 1.6
+      );
+
+      ghostTone.connect(ghostGain);
+      ghostGain.connect(masterGain);
+
+      ghostTone.start(currentTime);
+      ghostTone.stop(currentTime + 1.7);
+
+
+      // Deep background rumble
+
+      const rumbleTone =
+        audioContext.createOscillator();
+
+      const rumbleGain =
+        audioContext.createGain();
+
+      rumbleTone.type = "square";
+
+      rumbleTone.frequency.setValueAtTime(
+        95,
+        currentTime + 0.1
+      );
+
+      rumbleTone.frequency.exponentialRampToValueAtTime(
+        40,
+        currentTime + 1.5
+      );
+
+      rumbleGain.gain.setValueAtTime(
+        0.06,
+        currentTime
+      );
+
+      rumbleGain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        currentTime + 1.5
+      );
+
+      rumbleTone.connect(rumbleGain);
+      rumbleGain.connect(masterGain);
+
+      rumbleTone.start(currentTime + 0.1);
+      rumbleTone.stop(currentTime + 1.6);
+    }
+
+
+    function resetPrediction() {
+      clearTimeout(analysisTimer);
+      clearInterval(countdownTimer);
+
+      stage = 0;
+
+      progress.style.transition = "none";
+      progress.style.width = "0%";
+
+      percent.innerText =
+        "0% analyzed";
+
+      statusText.innerText =
+        "Connecting to the future...";
+
+      countdownText.innerText = "3";
+
+      predictionScreen.style.display = "none";
+      booScreen.style.display = "none";
+      loadingScreen.style.display = "block";
+
+      container.classList.remove("shake");
+
+      void progress.offsetWidth;
+
+      progress.style.transition =
+        "width 0.8s ease";
+    }
+
+
+    function startPrediction() {
+      resetPrediction();
+
+      analysisTimer =
+        setTimeout(runAnalysis, 600);
+    }
 
 
     function runAnalysis() {
       if (stage < stages.length) {
-        progress.style.width = stages[stage].width + "%";
-        percent.innerText = stages[stage].width + "% analyzed";
-        statusText.innerText = stages[stage].text;
+        progress.style.width =
+          stages[stage].width + "%";
+
+        percent.innerText =
+          stages[stage].width +
+          "% analyzed";
+
+        statusText.innerText =
+          stages[stage].text;
 
         stage++;
 
-        analysisTimer = setTimeout(runAnalysis, 850);
+        analysisTimer =
+          setTimeout(
+            runAnalysis,
+            850
+          );
       } else {
-        analysisTimer = setTimeout(showPrediction, 700);
+        analysisTimer =
+          setTimeout(
+            showPrediction,
+            700
+          );
       }
     }
 
@@ -415,53 +797,59 @@
       booScreen.style.display = "none";
 
       let count = 3;
+
       countdownText.innerText = count;
 
-      countdownTimer = setInterval(function () {
-        count--;
+      countdownTimer =
+        setInterval(function () {
+          count--;
 
-        if (count > 0) {
-          countdownText.innerText = count;
-        } else {
-          clearInterval(countdownTimer);
-          showBoo();
-        }
-      }, 1000);
+          if (count > 0) {
+            countdownText.innerText = count;
+          } else {
+            clearInterval(countdownTimer);
+            showBoo();
+          }
+        }, 1000);
     }
 
 
     function showBoo() {
       predictionScreen.style.display = "none";
       booScreen.style.display = "block";
+
+      container.classList.remove("shake");
+
+      void container.offsetWidth;
+
+      container.classList.add("shake");
+
+      playSpookySound();
     }
 
 
     function replayPrediction() {
-      clearTimeout(analysisTimer);
-      clearInterval(countdownTimer);
+      /*
+        The button tap gives the browser direct user interaction,
+        making sound more likely to work during the replay.
+      */
 
-      stage = 0;
-
-      progress.style.transition = "none";
-      progress.style.width = "0%";
-
-      percent.innerText = "0% analyzed";
-      statusText.innerText = "Connecting to the future...";
-      countdownText.innerText = "3";
-
-      booScreen.style.display = "none";
-      predictionScreen.style.display = "none";
-      loadingScreen.style.display = "block";
-
-      void progress.offsetWidth;
-
-      progress.style.transition = "width 0.8s ease";
-
-      analysisTimer = setTimeout(runAnalysis, 600);
+      initializeAudio();
+      startPrediction();
     }
 
 
-    analysisTimer = setTimeout(runAnalysis, 600);
+    /*
+      Start automatically when the QR landing page opens.
+    */
+
+    window.addEventListener(
+      "load",
+      function () {
+        initializeAudio();
+        startPrediction();
+      }
+    );
   </script>
 
 </body>
