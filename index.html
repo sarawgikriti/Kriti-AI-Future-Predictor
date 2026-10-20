@@ -8,7 +8,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Kriti.AI Future Predictor 🔮</title>
+  <title>Kriti.AI Future Predictor</title>
 
   <style>
     * {
@@ -70,7 +70,9 @@
     .ball {
       margin: 22px 0 16px;
       font-size: 85px;
-      filter: drop-shadow(0 0 20px rgba(190, 120, 255, 0.55));
+      filter: drop-shadow(
+        0 0 20px rgba(190, 120, 255, 0.55)
+      );
       animation: float 2.3s ease-in-out infinite;
     }
 
@@ -104,7 +106,11 @@
     .progress {
       width: 0%;
       height: 100%;
-      background: linear-gradient(90deg, #9d55ff, #ff8a3d);
+      background: linear-gradient(
+        90deg,
+        #9d55ff,
+        #ff8a3d
+      );
       border-radius: 20px;
       transition: width 0.8s ease;
     }
@@ -208,6 +214,12 @@
       font-size: 25px;
     }
 
+    .boo-message {
+      color: #eee5f8;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
     .accuracy {
       margin: 22px 0;
       padding: 14px;
@@ -227,7 +239,11 @@
     .replay-btn {
       margin-top: 25px;
       padding: 13px 25px;
-      background: linear-gradient(90deg, #9d55ff, #ff8a3d);
+      background: linear-gradient(
+        90deg,
+        #9d55ff,
+        #ff8a3d
+      );
       border: none;
       border-radius: 25px;
       box-shadow: 0 5px 20px rgba(157, 85, 255, 0.3);
@@ -247,12 +263,6 @@
 
     .replay-btn:active {
       transform: scale(0.97);
-    }
-
-    .sound-note {
-      margin-top: 12px;
-      color: #826d92;
-      font-size: 11px;
     }
 
     .footer {
@@ -302,12 +312,45 @@
         transform: translateY(10px) rotate(-7deg);
       }
     }
+
+    @media (max-height: 700px) {
+      .container {
+        padding: 24px 22px;
+      }
+
+      .ball {
+        margin: 14px 0 12px;
+        font-size: 66px;
+      }
+
+      .boo-screen h1 {
+        font-size: 46px;
+      }
+
+      .ghost {
+        font-size: 62px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ball,
+      .sparkle,
+      .bat,
+      .ghost,
+      .shake {
+        animation: none;
+      }
+
+      .progress {
+        transition: none;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Decorative background elements -->
+  <!-- Background decorations -->
 
   <div
     class="sparkle"
@@ -342,14 +385,14 @@
   </div>
 
 
-  <div
+  <main
     class="container"
     id="container"
   >
 
     <!-- Automatic AI analysis screen -->
 
-    <div id="loading">
+    <section id="loading">
 
       <div class="tiny-title">
         KRITI.AI
@@ -371,6 +414,7 @@
       <div
         class="status"
         id="status"
+        aria-live="polite"
       >
         Connecting to the future...
       </div>
@@ -393,12 +437,12 @@
         ✨ Powered by questionable intelligence™
       </div>
 
-    </div>
+    </section>
 
 
     <!-- Prediction screen -->
 
-    <div
+    <section
       class="prediction-screen"
       id="prediction"
     >
@@ -428,18 +472,20 @@
       <div
         class="countdown"
         id="countdown"
+        aria-live="assertive"
       >
         3
       </div>
 
-    </div>
+    </section>
 
 
-    <!-- Final Halloween screen -->
+    <!-- Final Halloween reveal -->
 
-    <div
+    <section
       class="boo-screen"
       id="boo"
+      aria-live="assertive"
     >
 
       <div class="ghost">
@@ -454,7 +500,7 @@
         YOU'VE BEEN TRICKED!
       </h2>
 
-      <p>
+      <p class="boo-message">
         Looks like the AI really
         <em>can</em>
 
@@ -473,23 +519,19 @@
 
       <button
         class="replay-btn"
+        id="replayButton"
         type="button"
-        onclick="replayPrediction()"
       >
         🔄 Predict Again
       </button>
-
-      <div class="sound-note">
-        🔊 Tap “Predict Again” if your phone blocked the sound
-      </div>
 
       <div class="footer">
         KRITI.AI • Future Predictor
       </div>
 
-    </div>
+    </section>
 
-  </div>
+  </main>
 
 
   <script>
@@ -516,6 +558,9 @@
 
     const countdownText =
       document.getElementById("countdown");
+
+    const replayButton =
+      document.getElementById("replayButton");
 
 
     const stages = [
@@ -547,180 +592,236 @@
 
 
     let stage = 0;
-    let analysisTimer;
-    let countdownTimer;
-    let audioContext;
+    let analysisTimer = null;
+    let countdownTimer = null;
+    let audioContext = null;
+    let audioUnlocked = false;
 
 
-    function initializeAudio() {
+    function getAudioContext() {
+      if (audioContext) {
+        return audioContext;
+      }
+
+      const BrowserAudioContext =
+        window.AudioContext ||
+        window.webkitAudioContext;
+
+      if (!BrowserAudioContext) {
+        return null;
+      }
+
+      audioContext =
+        new BrowserAudioContext();
+
+      return audioContext;
+    }
+
+
+    function unlockAudio() {
       try {
-        if (!audioContext) {
-          const BrowserAudioContext =
-            window.AudioContext ||
-            window.webkitAudioContext;
+        const context = getAudioContext();
 
-          if (!BrowserAudioContext) {
-            return;
-          }
-
-          audioContext =
-            new BrowserAudioContext();
+        if (!context) {
+          return;
         }
 
-        if (audioContext.state === "suspended") {
-          audioContext.resume();
+        if (context.state === "suspended") {
+          context.resume();
         }
+
+        /*
+          Play an inaudible sound immediately during the tap.
+          This helps unlock audio on stricter mobile browsers.
+        */
+
+        const oscillator =
+          context.createOscillator();
+
+        const gain =
+          context.createGain();
+
+        gain.gain.setValueAtTime(
+          0.0001,
+          context.currentTime
+        );
+
+        oscillator.connect(gain);
+        gain.connect(context.destination);
+
+        oscillator.start(
+          context.currentTime
+        );
+
+        oscillator.stop(
+          context.currentTime + 0.02
+        );
+
+        audioUnlocked = true;
       } catch (error) {
-        console.log("Audio could not be initialized.");
+        audioUnlocked = false;
       }
     }
 
 
     function playSpookySound() {
-      initializeAudio();
+      try {
+        const context = getAudioContext();
 
-      if (
-        !audioContext ||
-        audioContext.state !== "running"
-      ) {
-        return;
+        if (
+          !context ||
+          context.state !== "running"
+        ) {
+          return;
+        }
+
+        const currentTime =
+          context.currentTime;
+
+        const masterGain =
+          context.createGain();
+
+        masterGain.connect(
+          context.destination
+        );
+
+        masterGain.gain.setValueAtTime(
+          0.0001,
+          currentTime
+        );
+
+        masterGain.gain.exponentialRampToValueAtTime(
+          0.38,
+          currentTime + 0.05
+        );
+
+        masterGain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          currentTime + 1.8
+        );
+
+
+        /*
+          Low descending spooky tone
+        */
+
+        const lowTone =
+          context.createOscillator();
+
+        const lowGain =
+          context.createGain();
+
+        lowTone.type = "sawtooth";
+
+        lowTone.frequency.setValueAtTime(
+          155,
+          currentTime
+        );
+
+        lowTone.frequency.exponentialRampToValueAtTime(
+          45,
+          currentTime + 1.7
+        );
+
+        lowGain.gain.setValueAtTime(
+          0.32,
+          currentTime
+        );
+
+        lowGain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          currentTime + 1.75
+        );
+
+        lowTone.connect(lowGain);
+        lowGain.connect(masterGain);
+
+        lowTone.start(currentTime);
+        lowTone.stop(currentTime + 1.8);
+
+
+        /*
+          Higher ghost-like descending tone
+        */
+
+        const ghostTone =
+          context.createOscillator();
+
+        const ghostGain =
+          context.createGain();
+
+        ghostTone.type = "sine";
+
+        ghostTone.frequency.setValueAtTime(
+          720,
+          currentTime
+        );
+
+        ghostTone.frequency.exponentialRampToValueAtTime(
+          105,
+          currentTime + 1.5
+        );
+
+        ghostGain.gain.setValueAtTime(
+          0.16,
+          currentTime
+        );
+
+        ghostGain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          currentTime + 1.6
+        );
+
+        ghostTone.connect(ghostGain);
+        ghostGain.connect(masterGain);
+
+        ghostTone.start(currentTime);
+        ghostTone.stop(currentTime + 1.7);
+
+
+        /*
+          Deep background rumble
+        */
+
+        const rumbleTone =
+          context.createOscillator();
+
+        const rumbleGain =
+          context.createGain();
+
+        rumbleTone.type = "square";
+
+        rumbleTone.frequency.setValueAtTime(
+          95,
+          currentTime + 0.1
+        );
+
+        rumbleTone.frequency.exponentialRampToValueAtTime(
+          40,
+          currentTime + 1.5
+        );
+
+        rumbleGain.gain.setValueAtTime(
+          0.06,
+          currentTime
+        );
+
+        rumbleGain.gain.exponentialRampToValueAtTime(
+          0.0001,
+          currentTime + 1.5
+        );
+
+        rumbleTone.connect(rumbleGain);
+        rumbleGain.connect(masterGain);
+
+        rumbleTone.start(currentTime + 0.1);
+        rumbleTone.stop(currentTime + 1.6);
+      } catch (error) {
+        /*
+          Sound is optional. The visual experience continues
+          normally if the browser blocks audio.
+        */
       }
-
-      const currentTime =
-        audioContext.currentTime;
-
-      const masterGain =
-        audioContext.createGain();
-
-      masterGain.connect(
-        audioContext.destination
-      );
-
-      masterGain.gain.setValueAtTime(
-        0.0001,
-        currentTime
-      );
-
-      masterGain.gain.exponentialRampToValueAtTime(
-        0.4,
-        currentTime + 0.05
-      );
-
-      masterGain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        currentTime + 1.8
-      );
-
-
-      // Low descending spooky tone
-
-      const lowTone =
-        audioContext.createOscillator();
-
-      const lowGain =
-        audioContext.createGain();
-
-      lowTone.type = "sawtooth";
-
-      lowTone.frequency.setValueAtTime(
-        155,
-        currentTime
-      );
-
-      lowTone.frequency.exponentialRampToValueAtTime(
-        45,
-        currentTime + 1.7
-      );
-
-      lowGain.gain.setValueAtTime(
-        0.32,
-        currentTime
-      );
-
-      lowGain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        currentTime + 1.75
-      );
-
-      lowTone.connect(lowGain);
-      lowGain.connect(masterGain);
-
-      lowTone.start(currentTime);
-      lowTone.stop(currentTime + 1.8);
-
-
-      // Higher ghost-like descending tone
-
-      const ghostTone =
-        audioContext.createOscillator();
-
-      const ghostGain =
-        audioContext.createGain();
-
-      ghostTone.type = "sine";
-
-      ghostTone.frequency.setValueAtTime(
-        720,
-        currentTime
-      );
-
-      ghostTone.frequency.exponentialRampToValueAtTime(
-        105,
-        currentTime + 1.5
-      );
-
-      ghostGain.gain.setValueAtTime(
-        0.16,
-        currentTime
-      );
-
-      ghostGain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        currentTime + 1.6
-      );
-
-      ghostTone.connect(ghostGain);
-      ghostGain.connect(masterGain);
-
-      ghostTone.start(currentTime);
-      ghostTone.stop(currentTime + 1.7);
-
-
-      // Deep background rumble
-
-      const rumbleTone =
-        audioContext.createOscillator();
-
-      const rumbleGain =
-        audioContext.createGain();
-
-      rumbleTone.type = "square";
-
-      rumbleTone.frequency.setValueAtTime(
-        95,
-        currentTime + 0.1
-      );
-
-      rumbleTone.frequency.exponentialRampToValueAtTime(
-        40,
-        currentTime + 1.5
-      );
-
-      rumbleGain.gain.setValueAtTime(
-        0.06,
-        currentTime
-      );
-
-      rumbleGain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        currentTime + 1.5
-      );
-
-      rumbleTone.connect(rumbleGain);
-      rumbleGain.connect(masterGain);
-
-      rumbleTone.start(currentTime + 0.1);
-      rumbleTone.stop(currentTime + 1.6);
     }
 
 
@@ -764,15 +865,18 @@
 
     function runAnalysis() {
       if (stage < stages.length) {
+        const currentStage =
+          stages[stage];
+
         progress.style.width =
-          stages[stage].width + "%";
+          currentStage.width + "%";
 
         percent.innerText =
-          stages[stage].width +
+          currentStage.width +
           "% analyzed";
 
         statusText.innerText =
-          stages[stage].text;
+          currentStage.text;
 
         stage++;
 
@@ -830,25 +934,43 @@
 
     function replayPrediction() {
       /*
-        The button tap gives the browser direct user interaction,
-        making sound more likely to work during the replay.
+        The button tap unlocks audio first.
+        The prediction then restarts automatically.
       */
 
-      initializeAudio();
+      unlockAudio();
       startPrediction();
     }
 
 
     /*
-      Start automatically when the QR landing page opens.
+      Silently attempt to unlock audio after any tap anywhere
+      on the page. There is no sound-related message or button.
+    */
+
+    document.addEventListener(
+      "pointerdown",
+      unlockAudio,
+      {
+        once: true,
+        passive: true
+      }
+    );
+
+
+    replayButton.addEventListener(
+      "click",
+      replayPrediction
+    );
+
+
+    /*
+      Start the prediction automatically when the page opens.
     */
 
     window.addEventListener(
       "load",
-      function () {
-        initializeAudio();
-        startPrediction();
-      }
+      startPrediction
     );
   </script>
 
