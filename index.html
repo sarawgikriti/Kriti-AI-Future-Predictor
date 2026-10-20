@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kriti.AI Future Predictor 🔮</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, #3c1764 0%, #180b2d 38%, #08050e 78%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 430px;
+      padding: 36px 25px;
+      background: rgba(15, 8, 25, 0.72);
+      border: 1px solid rgba(190, 130, 255, 0.35);
+      border-radius: 30px;
+      box-shadow: 0 0 45px rgba(130, 65, 200, 0.25);
+      backdrop-filter: blur(10px);
+    }
+
+    .tiny-title {
+      color: #c699ff;
+      font-size: 13px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+
+    .purple {
+      color: #c18cff;
+    }
+
+    .ball {
+      font-size: 85px;
+      margin: 22px 0 16px;
+      animation: float 2.3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(190, 120, 255, 0.55));
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .status {
+      font-size: 17px;
+      color: #e8dcf7;
+      min-height: 25px;
+      margin-top: 12px;
+    }
+
+    .bar {
+      height: 11px;
+      width: 100%;
+      background: #29173d;
+      border-radius: 20px;
+      overflow: hidden;
+      margin: 22px 0 10px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #9d55ff, #ff8a3d);
+      transition: width 0.8s ease;
+    }
+
+    .percent {
+      font-size: 13px;
+      color: #bda9cf;
+    }
+
+    .reveal {
+      display: none;
+    }
+
+    .prediction {
+      font-size: 15px;
+      color: #c9a8ef;
+      letter-spacing: 2px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .future-text {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    .countdown {
+      font-size: 65px;
+      color: #ff9a48;
+      font-weight: bold;
+      margin: 18px 0;
+    }
+
+    .boo {
+      display: none;
+    }
+
+    .ghost {
+      font-size: 78px;
+      margin-bottom: 4px;
+      animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0.3);
+      }
+      75% {
+        transform: scale(1.2);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .boo h1 {
+      font-size: 55px;
+      color: #ff903d;
+      margin-bottom: 5px;
+    }
+
+    .boo h2 {
+      font-size: 25px;
+      margin: 6px 0 18px;
+    }
+
+    .accuracy {
+      background: rgba(151, 80, 211, 0.15);
+      border: 1px solid rgba(201, 145, 255, 0.25);
+      border-radius: 18px;
+      padding: 14px;
+      margin: 22px 0;
+      color: #e4ccff;
+      font-weight: bold;
+    }
+
+    .halloween {
+      font-size: 22px;
+      color: #ffad68;
+      font-weight: bold;
+    }
+
+    .footer {
+      font-size: 12px;
+      color: #8d769f;
+      margin-top: 22px;
+    }
+
+    .sparkle {
+      position: absolute;
+      color: #f5c76b;
+      animation: blink 1.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="sparkle" style="top:10%;left:12%;">✦</div>
+  <div class="sparkle" style="top:18%;right:13%;">✦</div>
+  <div class="sparkle" style="bottom:15%;left:15%;">✦</div>
+  <div class="sparkle" style="bottom:11%;right:12%;">✦</div>
+
+  <div class="container">
+
+    <!-- AI ANALYSIS SCREEN -->
+    <div id="loading">
+
+      <div class="tiny-title">KRITI.AI</div>
+
+      <h1>
+        AI FUTURE<br>
+        <span class="purple">PREDICTOR</span>
+      </h1>
+
+      <div class="ball">🔮</div>
+
+      <div class="status" id="status">
+        Connecting to the future...
+      </div>
+
+      <div class="bar">
+        <div class="progress" id="progress"></div>
+      </div>
+
+      <div class="percent" id="percent">0% analyzed</div>
+
+      <div class="footer">
+        ✨ Powered by questionable intelligence™
+      </div>
+
+    </div>
+
+
+    <!-- PREDICTION SCREEN -->
+    <div class="reveal" id="prediction">
+
+      <div class="prediction">
+        ✨ PREDICTION FOUND ✨
+      </div>
+
+      <div class="ball">🔮</div>
+
+      <div class="future-text">
+        Your future has been revealed...
+        <br><br>
+        In the next few seconds,
+        <br>
+        <strong>you will realize you've been tricked.</strong>
+      </div>
+
+      <div class="countdown" id="countdown">3</div>
+
+    </div>
+
+
+    <!-- FINAL HALLOWEEN SCREEN -->
+    <div class="boo" id="boo">
+
+      <div class="ghost">👻</div>
+
+      <h1>BOO!</h1>
+
+      <h2>YOU'VE BEEN TRICKED!</h2>
+
+      <p>
+        Looks like the AI really <em>can</em><br>
+        predict your future. 🤖
+      </p>
+
+      <div class="accuracy">
+        🔮 Prediction Accuracy: 100% ✅
+      </div>
+
+      <div class="halloween">
+        🎃 Happy Halloween! 🍬
+      </div>
+
+      <div class="footer">
+        KRITI.AI • Future Predictor
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const progress = document.getElementById("progress");
+    const percent = document.getElementById("percent");
+    const status = document.getElementById("status");
+
+    const stages = [
+      { width: 18, text: "Reading your digital aura..." },
+      { width: 37, text: "Analyzing personality..." },
+      { width: 58, text: "Searching possible futures..." },
+      { width: 79, text: "Calculating probability..." },
+      { width: 96, text: "Prediction almost ready..." },
+      { width: 100, text: "Future identified ✓" }
+    ];
+
+    let stage = 0;
+
+    function runAnalysis() {
+
+      if (stage < stages.length) {
+
+        progress.style.width = stages[stage].width + "%";
+        percent.innerText = stages[stage].width + "% analyzed";
+        status.innerText = stages[stage].text;
+
+        stage++;
+
+        setTimeout(runAnalysis, 850);
+
+      } else {
+
+        setTimeout(showPrediction, 700);
+
+      }
+    }
+
+
+    function showPrediction() {
+
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("prediction").style.display = "block";
+
+      let count = 3;
+      const countdown = document.getElementById("countdown");
+
+      const timer = setInterval(function() {
+
+        count--;
+
+        if (count > 0) {
+
+          countdown.innerText = count;
+
+        } else {
+
+          clearInterval(timer);
+          showBoo();
+
+        }
+
+      }, 1000);
+    }
+
+
+    function showBoo() {
+
+      document.getElementById("prediction").style.display = "none";
+      document.getElementById("boo").style.display = "block";
+
+    }
+
+
+    setTimeout(runAnalysis, 600);
+
+  </script>
+
+</body>
+</html>
